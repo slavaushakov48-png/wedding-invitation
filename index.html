@@ -765,7 +765,7 @@
     <div class="date-line">11 липня 2026 року</div>
 
     <div class="guest-card">
-      <div class="guest-label">Дорогі</div>
+      <div class="guest-label" id="guestLabel">Дорогі</div>
       <div class="guest-name" id="guestNames">Анна та Антон</div>
       <div class="guest-ornament">✦ ♡ ✦</div>
     </div>
@@ -877,9 +877,32 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const guest = params.get("guest");
+    const appeal = params.get("appeal");
+
     if (guest) {
-      const el = document.getElementById("guestNames");
-      if (el) el.textContent = guest;
+      const guestEl = document.getElementById("guestNames");
+      const labelEl = document.getElementById("guestLabel");
+
+      if (guestEl) guestEl.textContent = guest;
+
+      if (labelEl) {
+        if (appeal) {
+          labelEl.textContent = appeal;
+        } else {
+          const lowerGuest = guest.toLowerCase();
+          const isPlural =
+            lowerGuest.includes(" та ") ||
+            lowerGuest.includes(" і ") ||
+            lowerGuest.includes(" й ") ||
+            lowerGuest.includes("&") ||
+            lowerGuest.includes(",") ||
+            lowerGuest.includes("родина") ||
+            lowerGuest.includes("сімʼя") ||
+            lowerGuest.includes("сім'я");
+
+          labelEl.textContent = isPlural ? "Дорогі" : "Дорога";
+        }
+      }
     }
 
     const panels = Array.from(document.querySelectorAll(".tab-panel"));
